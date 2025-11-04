@@ -1,21 +1,14 @@
-// // // se limpia App para poder trabajar
-// // se borra App.css y indexedDB.css
-// se crea la carpeta componentes y se crea un archivo menu
-import './App.css'
-import Menu from './components/menu'
+import "./App.css";
 
 function App() {
-  
-
+  const saySomething = () => {
+    console.log("something");
+  }
   return (
-    
-      <div>
-        <Menu></Menu>
-        <h1>Hola a todos</h1>
-      </div>
-      
-   
-  )
+    <div>
+      <h1 onClick={((saySomething))}>Hola a todos</h1>
+    </div>
+  );
 }
 
-export default App
+export default App;
