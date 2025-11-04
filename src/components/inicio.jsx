@@ -75,3 +75,6 @@
 // C:\Users\Usuario\Desktop\react\my-project>code .
 
 // C:\Users\Usuario\Desktop\react\my-project>
+
+
+// se utiliza la extencion ES7 + React/Redux para trabajar mas rapido
