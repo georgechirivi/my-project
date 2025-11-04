@@ -11,9 +11,6 @@ function App() {
     
       <div>
         <Menu></Menu>
-        <Menu></Menu>
-        <Menu></Menu>
-        <Menu></Menu>
         <h1>Hola a todos</h1>
       </div>
       
