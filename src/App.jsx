@@ -1,114 +1,89 @@
-// ¿Qué es una lista de objetos en React?
+// ¿Qué son las props?
 
-// Es un arreglo de objetos que puedes **renderizar dinámicamente** en la interfaz usando `.map()`. 
-// Cada objeto puede representar una entidad: proyecto, tarea, usuario, producto, etc.
+// Las **props** (propiedades) son datos que un componente padre le pasa a un componente hijo. 
+// Son **inmutables** desde el punto de vista del hijo, y permiten que el hijo se comporte de forma personalizada.
 
-// Ejemplo básico: 
+// Ejemplo básico: componente padre e hijo
 
-// lista de tareas
+// 1. Componente hijo (`Saludo.js`)
 
 // ```jsx
-// import React from 'react';
+// function Saludo({ nombre }) {
+//   return <h2>Hola, {nombre} 👋</h2>;
+// }
 
-// const tareas = [
-//   { id: 1, titulo: 'Aprender React', completado: false },
-//   { id: 2, titulo: 'Construir portafolio Django', completado: true },
-//   { id: 3, titulo: 'Practicar Git', completado: false },
-// ];
+// export default Saludo;
+// ```
 
-// function ListaTareas() {
+// 2. Componente padre (`App.js`)
+
+// ```jsx
+// import Saludo from './Saludo';
+
+// function App() {
 //   return (
-//     <ul>
-//       {tareas.map((tarea) => (
-//         <li key={tarea.id}>
-//           {tarea.titulo} {tarea.completado ? '✅' : '❌'}
-//         </li>
-//       ))}
-//     </ul>
+//     <div>
+//       <Saludo nombre="Jorge" />
+//       <Saludo nombre="React Developer" />
+//     </div>
 //   );
 // }
 
-// export default ListaTareas;
+// export default App;
 // ```
 
+// Aquí el componente `App` pasa el prop `nombre` al componente `Saludo`, que lo usa para renderizar contenido personalizado.
+
+// Props múltiples
+
+// ```jsx
+// function Proyecto({ titulo, descripcion }) {
+//   return (
+//     <div>
+//       <h3>{titulo}</h3>
+//       <p>{descripcion}</p>
+//     </div>
+//   );
+// }
+
+// // En el padre
+// <Proyecto titulo="Portafolio Django" descripcion="Sitio web con proyectos y contacto" />
+// ```
+// Bonus: props con funciones
+
+// Puedes pasar funciones como props para que el hijo las ejecute:
+
+// ```jsx
+// function Boton({ onClick }) {
+//   return <button onClick={onClick}>Haz clic</button>;
+// }
+
+// function App() {
+//   const mostrarAlerta = () => alert('¡Hola Jorge!');
+//   return <Boton onClick={mostrarAlerta} />;
+// }
+// ```
 // Buenas prácticas
 
-// - Usa `key` única** (como `id`) para cada elemento renderizado.
-// - Puedes **filtrar, ordenar o transformar** la lista antes de renderizarla.
-// - Si la lista viene de una API, usa `useEffect` y `useState` para cargarla dinámicamente.
+// - Usa destructuring (`{ nombre }`) para acceder a props fácilmente.
+// - Define `propTypes` si quieres validar props (opcional).
+// - Si el hijo necesita modificar datos, usa `useState` en el padre y pasa funciones para actualizar.
 
-// Bonus:
-// lista editable con estado
+// ---
 
-// ```jsx
-// import React, { useState } from 'react';
-
-// function ListaEditable() {
-//   const [tareas, setTareas] = useState([
-//     { id: 1, titulo: 'Aprender React', completado: false },
-//     { id: 2, titulo: 'Construir portafolio Django', completado: true },
-//   ]);
-
-//   const toggleCompletado = (id) => {
-//     setTareas(tareas.map(t =>
-//       t.id === id ? { ...t, completado: !t.completado } : t
-//     ));
-//   };
-
-//   return (
-//     <ul>
-//       {tareas.map((t) => (
-//         <li key={t.id} onClick={() => toggleCompletado(t.id)}>
-//           {t.titulo} {t.completado ? '✅' : '❌'}
-//         </li>
-//       ))}
-//     </ul>
-//   );
-// }
-
-// export default ListaEditable;
-// ```
-
-const movies =["Lord of the rings", "Star Wars", "Dunas"];
-const animals = [
-  {
-    id: 1,
-    name: "dog",
-    img: "https://nypost.com/wp-content/uploads/sites/2/2022/12/worlds-cutest-dog-comp-1.jpg",
-  },
-  {
-    id: 2,
-    name: "cat",
-    img: "https://img.freepik.com/foto-gratis/lindo-gatito-domestico-sienta-ventana-mirando-fuera-ia-generativa_188544-12519.jpg",
-  },
-  {
-    id: 3,
-    name: "bird",
-    img: "https://media.cnn.com/api/v1/images/stellar/prod/190414090035-01-cassowary.jpg",
-  },
-];
-const HTMLmovies = movies.map((movie, index) => {
-    return <p key={movie}>{index + 1} - {movie}</p>
-    })
-
-  const HTMLAnimals = animals.map(animal => {
-    return (
-      <div key={animal.id}>
-        <h2>{animal.name}</h2>
-        <img src={animal.img} alt="" width={200}/>
-      </div>
-    )
-  })
+// import Child from "./components/Child";
 
 function App() {
+  const text = "Variable desde el padre";
+  const person = {
+    sex: "Hombre",
+    age: 30
+  }
   return (
     <div>
       <h1>Hola a todos</h1>
-      <h1>Renderizado de listas</h1>
-
-      {HTMLmovies}
-      {HTMLAnimals}
-      
+      <h1>Props | Comunicacion entre componentes Padre-Hijo ↓</h1>
+      <Child msg={text} person={person}></Child>
     </div>
   );
 }
