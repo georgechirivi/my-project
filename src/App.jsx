@@ -1,64 +1,72 @@
-// En React (y en JavaScript en general), 
-// la expresión `true && render` se usa comúnmente para **renderizado condicional**. 
-// Asi es cómo funciona y cómo se aplica en React:
+// ¿Qué es `.map()`?
 
-// ¿Qué significa `true && render`?
+// `.map()`:
+//  es un método de JavaScript que permite **recorrer un array** y 
+// **transformar cada elemento**. En React, 
+// lo usamos para **renderizar componentes repetitivos** como listas, tarjetas, botones, etc.
 
-// En JavaScript, el operador lógico `&&` evalúa la primera expresión (`true` en este caso) y, 
-// si es verdadera, devuelve la segunda expresión. Entonces:
-
-// ```js
-// true && <MiComponente />
-// ```
-
-// Esto devuelve `<MiComponente />`, lo que significa que **se renderiza el componente**.
-
-// ---
-
-// ### ✅ Ejemplo práctico en React
+// Ejemplo básico en React
 
 // ```jsx
-// function App() {
-//   const mostrarMensaje = true;
+// function ListaFrutas() {
+//   const frutas = ['Manzana', 'Banano', 'Pera', 'Uva'];
 
 //   return (
-//     <div>
-//       <h1>Bienvenido</h1>
-//       {mostrarMensaje && <p>Este es un mensaje condicional</p>}
-//     </div>
+//     <ul>
+//       {frutas.map((fruta, index) => (
+//         <li key={index}>{fruta}</li>
+//       ))}
+//     </ul>
 //   );
 // }
 // ```
 
-// - Si `mostrarMensaje` es `true`, se renderiza el `<p>`.
-// - Si es `false`, no se renderiza nada.
+// - `frutas.map(...)` recorre el array.
+// - `fruta` es el valor actual.
+// - `index` es la posición en el array.
+// - `key={index}` es obligatorio para que React identifique cada elemento (idealmente usa un ID único si lo tienes).
 
 // ---
 
-// Consideraciones
+// ### 🧩 Ejemplo con objetos
 
-// - Si la primera expresión es `false`, `null`, `undefined`, `0`, `NaN`, o una cadena vacía `""`, **no se renderiza nada**.
-// - Es útil para evitar `if` o ternarios cuando solo necesitas mostrar algo si una condición se cumple.
+// ```jsx
+// function ListaUsuarios() {
+//   const usuarios = [
+//     { id: 1, nombre: 'Ana' },
+//     { id: 2, nombre: 'Luis' },
+//     { id: 3, nombre: 'Carlos' },
+//   ];
+
+//   return (
+//     <div>
+//       {usuarios.map((usuario) => (
+//         <p key={usuario.id}>Hola, {usuario.nombre}!</p>
+//       ))}
+//     </div>
+//   );
+// }
+// ```
+// Buenas prácticas
+
+// - Usa una `key` única (como un ID) para evitar errores de renderizado.
+// - No uses `.map()` directamente en el `return` de una función si necesitas lógica adicional. Mejor guarda el resultado en una variable.
 
 // ---
 
-import "./App.css";
+const movies =["Lord of the rings", "Star Wars", "Dunas"];
+const HTMLmovies = movies.map(movie => {
+    return <p key={movie}>{movie}</p>
+    })
 
 function App() {
-  const condition  = true;
-
   return (
     <div>
       <h1>Hola a todos</h1>
-      <h1>Renderizado condicional</h1>
-      {/*condition && <h2>La condicion se cumple</h2>*/}
-      {/*!condition && <h2>La condicion no se cumple</h2>*/}
+      <h1>Renderizado de listas</h1>
 
-      {condition ? (
-        <h2>La condicion se cumple</h2>
-      ) : (
-        <h2>La condicion no se cumple</h2>
-      )}
+      {HTMLmovies}
+      
     </div>
   );
 }
