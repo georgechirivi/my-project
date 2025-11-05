@@ -1,62 +1,72 @@
-// ¿Qué es `.map()`?
+// ¿Qué es el `index` en `.map()`?
 
-// `.map()`:
-//  es un método de JavaScript que permite **recorrer un array** y 
-// **transformar cada elemento**. En React, 
-// lo usamos para **renderizar componentes repetitivos** como listas, tarjetas, botones, etc.
+// Cuando haces `.map()` sobre un array, puedes acceder a dos cosas:
 
-// Ejemplo básico en React
+// ```js
+// array.map((elemento, index) => {
+//   // elemento: el valor actual
+//   // index: la posición en el array
+// })
+// ```
+// En React, esto se usa comúnmente para asignar la propiedad `key`:
 
 // ```jsx
-// function ListaFrutas() {
-//   const frutas = ['Manzana', 'Banano', 'Pera', 'Uva'];
+// {frutas.map((fruta, index) => (
+//   <li key={index}>{fruta}</li>
+// ))}
+// ```
+
+// ---
+
+// ¿Cuándo usar `index` como `key`?
+
+// Usar el índice como `key` está bien **solo si**:
+
+// - La lista **no cambia** (no se agregan, eliminan o reordenan elementos).
+// - Los elementos **no tienen un ID único**.
+
+// Pero si la lista es dinámica, **es mejor usar un ID único** para evitar errores de renderizado.
+
+// ---
+
+// Ejemplo completo
+
+// ```jsx
+// function ListaTareas() {
+//   const tareas = ['Estudiar React', 'Practicar Django', 'Buscar trabajo'];
 
 //   return (
 //     <ul>
-//       {frutas.map((fruta, index) => (
-//         <li key={index}>{fruta}</li>
+//       {tareas.map((tarea, index) => (
+//         <li key={index}>
+//           {index + 1}. {tarea}
+//         </li>
 //       ))}
 //     </ul>
 //   );
 // }
 // ```
 
-// - `frutas.map(...)` recorre el array.
-// - `fruta` es el valor actual.
-// - `index` es la posición en el array.
-// - `key={index}` es obligatorio para que React identifique cada elemento (idealmente usa un ID único si lo tienes).
+// Esto renderiza:
+
+// ```
+// 1. Estudiar React
+// 2. Practicar Django
+// 3. Buscar trabajo
+// ```
 
 // ---
 
-// ### 🧩 Ejemplo con objetos
-
-// ```jsx
-// function ListaUsuarios() {
-//   const usuarios = [
-//     { id: 1, nombre: 'Ana' },
-//     { id: 2, nombre: 'Luis' },
-//     { id: 3, nombre: 'Carlos' },
-//   ];
-
-//   return (
-//     <div>
-//       {usuarios.map((usuario) => (
-//         <p key={usuario.id}>Hola, {usuario.nombre}!</p>
-//       ))}
-//     </div>
-//   );
-// }
-// ```
 // Buenas prácticas
 
-// - Usa una `key` única (como un ID) para evitar errores de renderizado.
-// - No uses `.map()` directamente en el `return` de una función si necesitas lógica adicional. Mejor guarda el resultado en una variable.
+// - Si tienes un array de objetos con `id`, usa `key={obj.id}`.
+// - Evita usar `index` como `key` si la lista puede cambiar.
 
 // ---
 
 const movies =["Lord of the rings", "Star Wars", "Dunas"];
-const HTMLmovies = movies.map(movie => {
-    return <p key={movie}>{movie}</p>
+const HTMLmovies = movies.map((movie, index) => {
+    return <p key={movie}>{index + 1} - {movie}</p>
     })
 
 function App() {
