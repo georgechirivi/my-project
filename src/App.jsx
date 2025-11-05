@@ -1,73 +1,104 @@
-// ¿Qué es el `index` en `.map()`?
+// ¿Qué es una lista de objetos en React?
 
-// Cuando haces `.map()` sobre un array, puedes acceder a dos cosas:
+// Es un arreglo de objetos que puedes **renderizar dinámicamente** en la interfaz usando `.map()`. 
+// Cada objeto puede representar una entidad: proyecto, tarea, usuario, producto, etc.
 
-// ```js
-// array.map((elemento, index) => {
-//   // elemento: el valor actual
-//   // index: la posición en el array
-// })
-// ```
-// En React, esto se usa comúnmente para asignar la propiedad `key`:
+// Ejemplo básico: 
+
+// lista de tareas
 
 // ```jsx
-// {frutas.map((fruta, index) => (
-//   <li key={index}>{fruta}</li>
-// ))}
-// ```
+// import React from 'react';
 
-// ---
+// const tareas = [
+//   { id: 1, titulo: 'Aprender React', completado: false },
+//   { id: 2, titulo: 'Construir portafolio Django', completado: true },
+//   { id: 3, titulo: 'Practicar Git', completado: false },
+// ];
 
-// ¿Cuándo usar `index` como `key`?
-
-// Usar el índice como `key` está bien **solo si**:
-
-// - La lista **no cambia** (no se agregan, eliminan o reordenan elementos).
-// - Los elementos **no tienen un ID único**.
-
-// Pero si la lista es dinámica, **es mejor usar un ID único** para evitar errores de renderizado.
-
-// ---
-
-// Ejemplo completo
-
-// ```jsx
 // function ListaTareas() {
-//   const tareas = ['Estudiar React', 'Practicar Django', 'Buscar trabajo'];
-
 //   return (
 //     <ul>
-//       {tareas.map((tarea, index) => (
-//         <li key={index}>
-//           {index + 1}. {tarea}
+//       {tareas.map((tarea) => (
+//         <li key={tarea.id}>
+//           {tarea.titulo} {tarea.completado ? '✅' : '❌'}
 //         </li>
 //       ))}
 //     </ul>
 //   );
 // }
-// ```
 
-// Esto renderiza:
-
+// export default ListaTareas;
 // ```
-// 1. Estudiar React
-// 2. Practicar Django
-// 3. Buscar trabajo
-// ```
-
-// ---
 
 // Buenas prácticas
 
-// - Si tienes un array de objetos con `id`, usa `key={obj.id}`.
-// - Evita usar `index` como `key` si la lista puede cambiar.
+// - Usa `key` única** (como `id`) para cada elemento renderizado.
+// - Puedes **filtrar, ordenar o transformar** la lista antes de renderizarla.
+// - Si la lista viene de una API, usa `useEffect` y `useState` para cargarla dinámicamente.
 
-// ---
+// Bonus:
+// lista editable con estado
+
+// ```jsx
+// import React, { useState } from 'react';
+
+// function ListaEditable() {
+//   const [tareas, setTareas] = useState([
+//     { id: 1, titulo: 'Aprender React', completado: false },
+//     { id: 2, titulo: 'Construir portafolio Django', completado: true },
+//   ]);
+
+//   const toggleCompletado = (id) => {
+//     setTareas(tareas.map(t =>
+//       t.id === id ? { ...t, completado: !t.completado } : t
+//     ));
+//   };
+
+//   return (
+//     <ul>
+//       {tareas.map((t) => (
+//         <li key={t.id} onClick={() => toggleCompletado(t.id)}>
+//           {t.titulo} {t.completado ? '✅' : '❌'}
+//         </li>
+//       ))}
+//     </ul>
+//   );
+// }
+
+// export default ListaEditable;
+// ```
 
 const movies =["Lord of the rings", "Star Wars", "Dunas"];
+const animals = [
+  {
+    id: 1,
+    name: "dog",
+    img: "https://nypost.com/wp-content/uploads/sites/2/2022/12/worlds-cutest-dog-comp-1.jpg",
+  },
+  {
+    id: 2,
+    name: "cat",
+    img: "https://img.freepik.com/foto-gratis/lindo-gatito-domestico-sienta-ventana-mirando-fuera-ia-generativa_188544-12519.jpg",
+  },
+  {
+    id: 3,
+    name: "bird",
+    img: "https://media.cnn.com/api/v1/images/stellar/prod/190414090035-01-cassowary.jpg",
+  },
+];
 const HTMLmovies = movies.map((movie, index) => {
     return <p key={movie}>{index + 1} - {movie}</p>
     })
+
+  const HTMLAnimals = animals.map(animal => {
+    return (
+      <div key={animal.id}>
+        <h2>{animal.name}</h2>
+        <img src={animal.img} alt="" width={200}/>
+      </div>
+    )
+  })
 
 function App() {
   return (
@@ -76,6 +107,7 @@ function App() {
       <h1>Renderizado de listas</h1>
 
       {HTMLmovies}
+      {HTMLAnimals}
       
     </div>
   );
