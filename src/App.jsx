@@ -1,98 +1,64 @@
-// // En React, el evento `onChange` 
-// // se usa para detectar cambios en un campo de entrada (como un `<input>` o `<textarea>`). 
-// // Es esencial para capturar lo que el usuario escribe y actualizar el estado del componente.
+// En React (y en JavaScript en general), 
+// la expresión `true && render` se usa comúnmente para **renderizado condicional**. 
+// Asi es cómo funciona y cómo se aplica en React:
 
-// // ### ✍️ Ejemplo básico con `useState`:
+// ¿Qué significa `true && render`?
 
-// // ```jsx
-// // import { useState } from 'react';
+// En JavaScript, el operador lógico `&&` evalúa la primera expresión (`true` en este caso) y, 
+// si es verdadera, devuelve la segunda expresión. Entonces:
 
-// // function Formulario() {
-// //   const [texto, setTexto] = useState('');
+// ```js
+// true && <MiComponente />
+// ```
 
-// //   const manejarCambio = (e) => {
-// //     setTexto(e.target.value);
-// //   };
+// Esto devuelve `<MiComponente />`, lo que significa que **se renderiza el componente**.
 
-// //   return (
-// //     <div>
-// //       <input type="text" value={texto} onChange={manejarCambio} />
-// //       <p>Texto ingresado: {texto}</p>
-// //     </div>
-// //   );
-// // }
-// // ```
+// ---
 
-// // - `value={texto}` vincula el input al estado.
-// // - `onChange={manejarCambio}` actualiza el estado cada vez que el usuario escribe.
-// // - `e.target.value` accede al valor actual del input.
-
-// import { useState } from 'react';
-
-// function Formulario() {
-//   const [texto, setTexto] = useState('');
-
-//   const manejarCambio = (e) => {
-//     setTexto(e.target.value);
-//   };
-
-//   return (
-//     <div>
-//       <input type="text" value={texto} onChange={manejarCambio} />
-//       <p>Texto ingresado: {texto}</p>
-//     </div>
-//   );
-// }
-
-// En React, el evento `onChange` se usa para detectar cambios en un campo de entrada 
-// (como un `<input>` o `<textarea>`). 
-// Es esencial para capturar lo que el usuario escribe y actualizar el estado del componente.
-
-
-// ### ✍️ Ejemplo básico con `useState`:
+// ### ✅ Ejemplo práctico en React
 
 // ```jsx
-// import { useState } from 'react';
-
-// function Formulario() {
-//   const [texto, setTexto] = useState('');
-
-//   const manejarCambio = (e) => {
-//     setTexto(e.target.value);
-//   };
+// function App() {
+//   const mostrarMensaje = true;
 
 //   return (
 //     <div>
-//       <input type="text" value={texto} onChange={manejarCambio} />
-//       <p>Texto ingresado: {texto}</p>
+//       <h1>Bienvenido</h1>
+//       {mostrarMensaje && <p>Este es un mensaje condicional</p>}
 //     </div>
 //   );
 // }
 // ```
-// - `value={texto}` vincula el input al estado.
-// - `onChange={manejarCambio}` actualiza el estado cada vez que el usuario escribe.
-// - `e.target.value` accede al valor actual del input.
 
+// - Si `mostrarMensaje` es `true`, se renderiza el `<p>`.
+// - Si es `false`, no se renderiza nada.
 
-import { useState } from "react";
+// ---
+
+// Consideraciones
+
+// - Si la primera expresión es `false`, `null`, `undefined`, `0`, `NaN`, o una cadena vacía `""`, **no se renderiza nada**.
+// - Es útil para evitar `if` o ternarios cuando solo necesitas mostrar algo si una condición se cumple.
+
+// ---
+
 import "./App.css";
 
 function App() {
-  const [myText, setMyText] = useState("Tu nombre");
-  const [myValue, setMyValue] = useState("Jorge");
-
-  const handleInput= (e) => {
-    console.log(e.target.value);
-    setMyValue(e.target.value);
-  };
+  const condition  = true;
 
   return (
     <div>
       <h1>Hola a todos</h1>
-      <input type="text" 
-      placeholder={myText} 
-      value={myValue} 
-      onChange={handleInput}/>
+      <h1>Renderizado condicional</h1>
+      {/*condition && <h2>La condicion se cumple</h2>*/}
+      {/*!condition && <h2>La condicion no se cumple</h2>*/}
+
+      {condition ? (
+        <h2>La condicion se cumple</h2>
+      ) : (
+        <h2>La condicion no se cumple</h2>
+      )}
     </div>
   );
 }
