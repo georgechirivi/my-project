@@ -1,61 +1,73 @@
-// En React, el flujo de datos por defecto va de **padre a hijo** mediante props.
-// Sin embargo, si necesitas que un **componente hijo envíe información al padre**,
-// puedes hacerlo pasando una **función como prop** desde el padre al hijo.
-// El hijo la ejecuta cuando necesita comunicar algo.
+// Elevar el estado en React 
+// (en inglés, “**lifting state up**”) es una técnica que se usa cuando **dos o más componentes 
+// necesitan compartir información**. En lugar de mantener el estado en uno de los componentes, 
+// se “eleva” a su componente padre común para que todos puedan acceder y modificar ese estado a través de props.
 
-// Ejemplo básico: Comunicación hijo → padre
+// ¿Por qué elevar el estado?
+
+// - Evita duplicación de lógica.
+// - Permite sincronizar datos entre componentes hermanos.
+// - Facilita el control centralizado del estado.
+
+// ---
+// Ejemplo práctico
+
+// Supongamos que tienes dos componentes hermanos: `Formulario` y `Resumen`. 
+// Ambos necesitan acceder al mismo dato: el nombre del usuario.
 
 // ```jsx
-// // Padre.jsx
+// // App.jsx (componente padre)
 // import React, { useState } from 'react';
-// import Hijo from './Hijo';
+// import Formulario from './Formulario';
+// import Resumen from './Resumen';
 
-// function Padre() {
-//   const [mensaje, setMensaje] = useState('');
-
-//   const recibirMensaje = (texto) => {
-//     setMensaje(texto);
-//   };
+// function App() {
+//   const [nombre, setNombre] = useState('');
 
 //   return (
 //     <div>
-//       <h1>Mensaje del hijo: {mensaje}</h1>
-//       <Hijo enviarAlPadre={recibirMensaje} />
+//       <Formulario setNombre={setNombre} />
+//       <Resumen nombre={nombre} />
 //     </div>
 //   );
 // }
 
-// export default Padre;
+// export default App;
 // ```
 
 // ```jsx
-// // Hijo.jsx
-// import React from 'react';
-
-// function Hijo({ enviarAlPadre }) {
+// // Formulario.jsx
+// function Formulario({ setNombre }) {
 //   return (
-//     <button onClick={() => enviarAlPadre('¡Hola desde el hijo!')}>
-//       Enviar mensaje al padre
-//     </button>
+//     <input
+//       type="text"
+//       placeholder="Escribe tu nombre"
+//       onChange={(e) => setNombre(e.target.value)}
+//     />
 //   );
 // }
-
-// export default Hijo;
 // ```
+
+// ```jsx
+// // Resumen.jsx
+// function Resumen({ nombre }) {
+//   return <p>Tu nombre es: {nombre}</p>;
+// }
+// ```
+
+// ---
+
 // ¿Qué está pasando?
 
-// - El padre define una función `recibirMensaje` que actualiza su estado.
-// - Pasa esa función al hijo como prop (`enviarAlPadre`).
-// - El hijo la ejecuta cuando el usuario hace clic, enviando el mensaje al padre.
+// - `App` es el componente padre que contiene el estado `nombre`.
+// - `Formulario` actualiza ese estado usando `setNombre`.
+// - `Resumen` lo muestra usando `nombre`.
 
-// Variaciones útiles
-
-// - Puedes enviar **eventos**, **valores de formularios**, o **acciones**.
-// - También puedes usar **contexto** o **Redux** si la comunicación es más compleja o
-//   entre componentes no relacionados directamente.
+// Así, ambos componentes están sincronizados gracias a que el estado fue “elevado” al padre.
 
 import { useState } from "react";
 import Child from "./components/Child";
+import HelloUser from "./components/HelloUser";
 
 function App() {
   const [displayName, setDisplayName] = useState("");
@@ -67,11 +79,13 @@ function App() {
   return (
     <div>
       <h1>Hola a todos</h1>
-      <h2>Props | Comunicacion hijo-padre ↑</h2>
+      <h2>State Up | Comunicacion entre hermanos</h2>
 
       <h2>Hola {displayName}</h2>
 
-      <Child handleLogin={login}></Child>
+      <HelloUser userName={displayName}></HelloUser>
+
+      <Child handleLogin={login} userName={displayName}></Child>
     </div>
   );
 }
