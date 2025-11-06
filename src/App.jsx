@@ -1,62 +1,77 @@
-// `className` en React
-// En React, usamos `className` en lugar de `class` para asignar clases CSS. 
-// Esto se debe a que `class` es una palabra reservada en JavaScript.
+// En React, el flujo de datos por defecto va de **padre a hijo** mediante props.
+// Sin embargo, si necesitas que un **componente hijo envíe información al padre**,
+// puedes hacerlo pasando una **función como prop** desde el padre al hijo.
+// El hijo la ejecuta cuando necesita comunicar algo.
 
-// Ejemplo:
-
-// ```jsx
-// function Boton() {
-//   return <button className="btn btn-primary">Haz clic</button>;
-// }
-// ```
-
-// 🔹 Aquí `"btn btn-primary"` son clases de Bootstrap o Tailwind, por ejemplo.
-
-// ---
-// `htmlFor` en React
-
-// En etiquetas `<label>`, usamos `htmlFor` en lugar de `for` para asociar el label con un input. 
-// Esto mejora accesibilidad y permite que al hacer clic en el label, el input se active.
-
-// Ejemplo:
+// Ejemplo básico: Comunicación hijo → padre
 
 // ```jsx
-// function Formulario() {
+// // Padre.jsx
+// import React, { useState } from 'react';
+// import Hijo from './Hijo';
+
+// function Padre() {
+//   const [mensaje, setMensaje] = useState('');
+
+//   const recibirMensaje = (texto) => {
+//     setMensaje(texto);
+//   };
+
 //   return (
-//     <form>
-//       <label htmlFor="email">Correo electrónico:</label>
-//       <input id="email" type="email" />
-//     </form>
+//     <div>
+//       <h1>Mensaje del hijo: {mensaje}</h1>
+//       <Hijo enviarAlPadre={recibirMensaje} />
+//     </div>
 //   );
 // }
+
+// export default Padre;
 // ```
 
-// 🔹 `htmlFor="email"` conecta el label con el input que tiene `id="email"`.
+// ```jsx
+// // Hijo.jsx
+// import React from 'react';
 
-// ---
-// ¿Por qué no usar `class` y `for` directamente?
+// function Hijo({ enviarAlPadre }) {
+//   return (
+//     <button onClick={() => enviarAlPadre('¡Hola desde el hijo!')}>
+//       Enviar mensaje al padre
+//     </button>
+//   );
+// }
 
-// React usa JSX, que es una mezcla de JavaScript y HTML. 
-// Para evitar conflictos con palabras reservadas de JS (`class`, `for`), se usan `className` y `htmlFor`.
+// export default Hijo;
+// ```
+// ¿Qué está pasando?
 
-// ---
+// - El padre define una función `recibirMensaje` que actualiza su estado.
+// - Pasa esa función al hijo como prop (`enviarAlPadre`).
+// - El hijo la ejecuta cuando el usuario hace clic, enviando el mensaje al padre.
+
+// Variaciones útiles
+
+// - Puedes enviar **eventos**, **valores de formularios**, o **acciones**.
+// - También puedes usar **contexto** o **Redux** si la comunicación es más compleja o
+//   entre componentes no relacionados directamente.
+
+import { useState } from "react";
+import Child from "./components/Child";
+
 function App() {
+  const [displayName, setDisplayName] = useState("");
+
+  const login = (name) => {
+    setDisplayName(name);
+  };
+
   return (
-    <div className="dark">
+    <div>
       <h1>Hola a todos</h1>
-      <h2>ClassName - htmlFor - select defaultValue</h2>
+      <h2>Props | Comunicacion hijo-padre ↑</h2>
 
-      <form>
-        <label htmlFor="username">Username</label>
-        <input type="text" id="username" placeholder="username" />
-        <br />
+      <h2>Hola {displayName}</h2>
 
-        <select defaultValue={"javascript"}>
-          <option value="html">HTML</option>
-          <option value="css">CSS</option>
-          <option value="javascript">Javascript</option>
-        </select>
-      </form>
+      <Child handleLogin={login}></Child>
     </div>
   );
 }
